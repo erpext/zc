@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="WX_ERP_NEWDZ@192.168.70.128" uuid="59837e54-10e0-4d2a-819a-a658ed162e14">
+      <database-info product="Microsoft SQL Server" version="11.00.3000" jdbc-version="4.2" driver-name="Microsoft JDBC Driver 6.4 for SQL Server" driver-version="6.4.0.0">
+        <extra-name-characters>$#@</extra-name-characters>
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>sa</user-name>
+      <resolve-scope>WX_ERP_NEWDZ:*</resolve-scope>
+    </data-source>
+  </component>
+</project>
