@@ -55,7 +55,7 @@ public class UserController {
 
             //获取account参数值
             account = (String) requestMap.get("user_no");
-            //获取password参数值
+            //获取password参数值 wx_bind_password
             password = (String) requestMap.get("user_password");
 
             //获取wx_open_id_zc参数值
@@ -81,11 +81,11 @@ public class UserController {
 
             /*
                 1、密码加密
-                2、密码比对 md5Password
+                2、密码比对 wx_bind_password
                 3、更新openid
              */
             if (user != null) {  // && password
-/*                if (md5Password.equals(user.getUser_password())) {*/
+                if (password.equals(user.getWx_bind_password())) {
                     user.setWx_open_id_zc(wx_open_id_zc);
                     userService.updateWXid(user);
 
@@ -106,7 +106,7 @@ public class UserController {
                     }
                     logger.info(json);
                     return json;
-/*                } else {
+                } else {
                     Map result = new HashMap();
                     result.put("result", "NG");
                     List list = new ArrayList();
@@ -124,7 +124,7 @@ public class UserController {
                     }
                     logger.info(json);
                     return json;
-                }*/
+                }
 
 
 //                {"result":" NG"," ngData":[ {"code":"001","msg":"06"},{"code":"002","msg":"06"}]}

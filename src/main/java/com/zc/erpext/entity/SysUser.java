@@ -20,6 +20,16 @@ public class SysUser {
   private String wx_open_id_zc;
   private java.sql.Timestamp wx_open_id_datetime;
 
+  public String getWx_bind_password() {
+    return wx_bind_password;
+  }
+
+  public void setWx_bind_password(String wx_bind_password) {
+    this.wx_bind_password = wx_bind_password;
+  }
+
+  private String wx_bind_password;
+
   public Long getId() {
     return id;
   }
