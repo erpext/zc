@@ -52,7 +52,7 @@
     <insert id="insertCpyks" parameterType="java.util.Map">
         INSERT INTO kc_tbCpyks
         (yk_no, yk_date,  framework_no, ckdd_old, ckdd,  confirm_flag, company_id, create_user_no, create_datetime)
-        VALUES ( #{ykno,jdbcType=VARCHAR},  getdate(),  '00',  #{ckdd_yc,jdbcType=VARCHAR},  #{ckdd_yr,jdbcType=VARCHAR}, '1', 1, #{open_id,jdbcType=VARCHAR}, getdate());
+        VALUES ( #{ykno,jdbcType=VARCHAR},  getdate(),  '00',  #{ckdd_yc,jdbcType=VARCHAR},  #{ckdd_yr,jdbcType=VARCHAR}, #{confirm_flag,jdbcType=VARCHAR}, 1, #{open_id,jdbcType=VARCHAR}, getdate());
     </insert>
 
     <insert id="insertCpykLines" parameterType="com.zc.erpext.entity.KcTbcpykLines">

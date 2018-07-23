@@ -153,6 +153,7 @@ public class MoveOutController {
             iMap.put("ckdd_yc", ckdd_yc);
             iMap.put("ckdd_yr", ckdd_yr);
             iMap.put("open_id", userNo);
+            iMap.put("confirm_flag", '0');
             moveWareHouseService.insertCpyks(iMap);
 
             long master_id = moveWareHouseService.getYkdIdByYkno(ykno);
