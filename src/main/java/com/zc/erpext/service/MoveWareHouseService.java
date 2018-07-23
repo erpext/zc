@@ -31,4 +31,6 @@ public interface MoveWareHouseService {
     void insertCpykLines(KcTbcpykLines kcTbcpykLines);
 
     long getYkdIdByYkno(String ykno);
+
+    String getUserNoByOpenId(String open_id);
 }

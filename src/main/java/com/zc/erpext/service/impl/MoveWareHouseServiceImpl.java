@@ -68,6 +68,11 @@ public class MoveWareHouseServiceImpl implements MoveWareHouseService {
     public long getYkdIdByYkno(String ykno) {
         return moveWareHouseDao.getYkdIdByYkno(ykno);
     }
+
+    @Override
+    public String getUserNoByOpenId(String open_id) {
+        return moveWareHouseDao.getUserNoByOpenId(open_id);
+    }
 /*
     @Override
     public List<MoveWareHouseController> getUser() {

@@ -88,6 +88,27 @@ public class MoveOutController {
                 return json;
             }
 
+            // 校验用户openid是否正确
+            String userNo = getUserNoByOpenId(open_id);
+            if (null == userNo || ("").equals(userNo)) {
+                Map result = new HashMap();
+                result.put("result", "NG");
+                List list = new ArrayList();
+                Map ngData = new HashMap();
+                ngData.put("code", "0005");
+                ngData.put("msg", "open id 不正确!");
+                list.add(ngData);
+                result.put("ngData", list);
+                String json = null;
+                try {
+                    json = mapper.writeValueAsString(result);
+                } catch (JsonProcessingException e) {
+
+                }
+                logger.info(json);
+                return json;
+            }
+
             /*
             获取到参数后
             循环校验卷号
@@ -131,7 +152,7 @@ public class MoveOutController {
             iMap.put("ykno", ykno);
             iMap.put("ckdd_yc", ckdd_yc);
             iMap.put("ckdd_yr", ckdd_yr);
-            iMap.put("open_id", open_id);
+            iMap.put("open_id", userNo);
             moveWareHouseService.insertCpyks(iMap);
 
             long master_id = moveWareHouseService.getYkdIdByYkno(ykno);
@@ -175,7 +196,7 @@ public class MoveOutController {
                     kcTbcpykLines.setProd_company(kcTbcpkchzs.getProd_company());
                     kcTbcpykLines.setCompany_id(kcTbcpkchzs.getCompany_id());
 
-                    kcTbcpykLines.setCreate_user_no(open_id);
+                    kcTbcpykLines.setCreate_user_no(userNo);
 
                     moveWareHouseService.insertCpykLines(kcTbcpykLines);
 
@@ -183,7 +204,7 @@ public class MoveOutController {
                     //更新库存中库位
                     kcTbcpkchzs.setCkdd(ckdd_yr);
                     kcTbcpkchzs.setCkqy("移库中");
-                    kcTbcpkchzs.setUpdate_user_no(open_id);
+                    kcTbcpkchzs.setUpdate_user_no(userNo);
                     moveWareHouseService.updateCkdd(kcTbcpkchzs);
 
 
@@ -235,10 +256,14 @@ public class MoveOutController {
 
 
         } catch (Exception e) {
-
+            logger.error(e.getMessage());
         }
         return "";
 
+    }
+
+    private String getUserNoByOpenId(String open_id) {
+        return moveWareHouseService.getUserNoByOpenId(open_id);
     }
 
     private String getMaxYkNo() {

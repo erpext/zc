@@ -44,7 +44,7 @@
         UPDATE kc_tbCpkchzs SET
         ckdd = #{ckdd,jdbcType=VARCHAR},
         ckqy = #{ckqy,jdbcType=VARCHAR},
-        update_user_no = (SELECT  top 1  user_no from SYS_USER u where u.WX_OPEN_ID_ZC =  #{update_user_no,jdbcType=VARCHAR}),
+        update_user_no = #{update_user_no,jdbcType=VARCHAR},
         update_datetime = getdate()
         WHERE ID = #{id,jdbcType=BIGINT}
     </update>
@@ -52,7 +52,7 @@
     <insert id="insertCpyks" parameterType="java.util.Map">
         INSERT INTO kc_tbCpyks
         (yk_no, yk_date,  framework_no, ckdd_old, ckdd,  confirm_flag, company_id, create_user_no, create_datetime)
-        VALUES ( #{ykno,jdbcType=VARCHAR},  getdate(),  '00',  #{ckdd_yc,jdbcType=VARCHAR},  #{ckdd_yr,jdbcType=VARCHAR}, '1', 1, (SELECT  top 1  user_no from SYS_USER u where u.WX_OPEN_ID_ZC =  #{open_id,jdbcType=VARCHAR}), getdate());
+        VALUES ( #{ykno,jdbcType=VARCHAR},  getdate(),  '00',  #{ckdd_yc,jdbcType=VARCHAR},  #{ckdd_yr,jdbcType=VARCHAR}, '1', 1, #{open_id,jdbcType=VARCHAR}, getdate());
     </insert>
 
     <insert id="insertCpykLines" parameterType="com.zc.erpext.entity.KcTbcpykLines">
@@ -94,9 +94,13 @@
         ,#{ckqy_old,jdbcType=VARCHAR}
         ,#{ckqy,jdbcType=VARCHAR}
         ,#{company_id,jdbcType=NUMERIC}
-        ,(SELECT top 1 user_no from SYS_USER u where u.WX_OPEN_ID_ZC = #{create_user_no,jdbcType=VARCHAR})
+        ,#{create_user_no,jdbcType=VARCHAR}
         ,getdate())
     </insert>
+
+    <select id="getUserNoByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT top 1 user_no from SYS_USER u where u.WX_OPEN_ID_ZC = #{open_id,jdbcType=VARCHAR}
+    </select>
 
 </mapper>
 
