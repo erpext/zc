@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.zc</groupId>
 	<artifactId>erpext</artifactId>
-	<version>1.0.0</version>
+	<version>180725.1</version>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
