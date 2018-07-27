@@ -158,6 +158,61 @@ public class UserController {
         return "";
     }
 
+    @RequestMapping(value = "/checkBind")
+    public String checkBind(@RequestBody String requestBody, HttpServletRequest request) {
+
+        try {
+            Map<String, Object> requestMap = mapper.readValue(requestBody, Map.class);
+            String wx_open_id_zc; //wx_open_id_zc
+
+            //获取wx_open_id_zc参数值
+            wx_open_id_zc = (String) requestMap.get("open_id");
+
+            // 校验用户openid是否正确
+            String userNo = userService.getUserNoByOpenId(wx_open_id_zc);
+            if (null == userNo || ("").equals(userNo)) {
+                Map result = new HashMap();
+                result.put("result", "NG");
+                List list = new ArrayList();
+                Map ngData = new HashMap();
+                ngData.put("code", "0006");
+                ngData.put("msg", "微信帐号未绑定!");
+                list.add(ngData);
+                result.put("ngData", list);
+                String json = null;
+                try {
+                    json = mapper.writeValueAsString(result);
+                } catch (JsonProcessingException e) {
+
+                }
+                logger.info(json);
+                return json;
+            }else{
+                Map result = new HashMap();
+                result.put("result", "OK");
+                List list = new ArrayList();
+                Map ngData = new HashMap();
+                ngData.put("code", "007");
+                ngData.put("msg", "微信用户合法!");
+                list.add(ngData);
+                result.put("ngData", list);
+
+                String json = null;
+                try {
+                    json = mapper.writeValueAsString(result);
+                } catch (JsonProcessingException e) {
+
+                }
+                logger.info(json);
+                return json;
+            }
+
+        } catch (IOException e) {
+
+        }
+            return "";
+    }
+
     private String reResult(Result r, Error error) {
         String json = null;
         try {

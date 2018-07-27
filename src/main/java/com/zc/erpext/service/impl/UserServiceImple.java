@@ -37,6 +37,17 @@ public class UserServiceImple implements UserService {
     }
 
     /**
+     * 用于校验微信是否已绑定
+     *
+     * @param wx_open_id
+     * @return
+     */
+    @Override
+    public String getUserNoByOpenId(String wx_open_id) {
+        return userDao.getUserNoByOpenId(wx_open_id);
+    }
+
+    /**
      * 更新用户信息微信信息
      *
      * @param account

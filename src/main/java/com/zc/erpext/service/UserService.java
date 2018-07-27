@@ -12,5 +12,7 @@ public interface UserService {
 
     SysUser getById(String account);
 
+    String getUserNoByOpenId(String wx_open_id);
+
     void updateWXid(SysUser sysUser);
 }

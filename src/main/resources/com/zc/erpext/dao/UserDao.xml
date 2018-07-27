@@ -73,5 +73,11 @@
 		= #{id,jdbcType=NUMERIC}
 	</update>
 
+	<!-- 校验微信用户是否合法 -->
+	<select id="getUserNoByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT top 1 user_no from SYS_USER u where u.WX_OPEN_ID_ZC = #{open_id,jdbcType=VARCHAR}
+	</select>
+
+
 </mapper>
 
