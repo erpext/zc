@@ -9,7 +9,9 @@
       <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
       <secret-storage>master_key</secret-storage>
       <user-name>sa</user-name>
+      <introspection-schemas>WX_ERP_NEWDZ:dbo</introspection-schemas>
       <resolve-scope>WX_ERP_NEWDZ:*</resolve-scope>
+      <unqualified-resolve-schemas>WX_ERP_NEWDZ:*</unqualified-resolve-schemas>
     </data-source>
   </component>
 </project>
