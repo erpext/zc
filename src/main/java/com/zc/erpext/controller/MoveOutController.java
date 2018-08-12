@@ -213,7 +213,7 @@ public class MoveOutController {
                     result.put("result", "NG");
                     Map ngData = new HashMap();
                     ngData.put("code", "0004");
-                    ngData.put("msg", cpjhlist.get(i) + "卷号没有找到!");
+                    ngData.put("msg", "[" + cpjhlist.get(i) + "]" + " 卷号没有找到!");
                     reList.add(ngData);
                 }
 

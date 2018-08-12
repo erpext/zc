@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by msi on 2018/6/14.
@@ -26,5 +27,21 @@ public class WareHouseServiceImpl implements WareHouseService{
     public List<String> getWareHouseDetail(String ckdd) {
         return wareHouseDao.getWareHouseDetail(ckdd);
     }
+
+    @Override
+    public int updateSaleFlag(List<Map> cpjhlist) {
+        return  wareHouseDao.updateSaleFlag(cpjhlist);
+    }
+
+    @Override
+    public String getWareHouseCpkchzsByCpjh(String cpjh) {
+        return wareHouseDao.getWareHouseCpkchzsByCpjh(cpjh);
+    }
+
+    @Override
+    public int updateSaleFlagById(Map map) {
+        return wareHouseDao.updateSaleFlagById(map);
+    }
+
 
 }

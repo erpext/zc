@@ -12,5 +12,23 @@
 		select ckqy from kc_tbckqy where ckdd= #{ckdd,jdbcType=VARCHAR} and ckqy!= '移库中' ORDER BY ckqy ASC
 	</select>
 
+	<!-- 更新语句 -->
+	<update id="updateSaleFlag" parameterType="java.util.List">
+		update kc_tbCpkchzs set sale_flag='1' where cpjh in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item.cpjh}
+		</foreach>
+		and hz_month=convert(varchar(6), getdate(), 112)
+	</update>
+
+	<select id="getWareHouseCpkchzsByCpjh" resultType="java.lang.String" parameterType="java.lang.String">
+		select id  from kc_tbCpkchzs where hz_month=convert(varchar(6), getdate(), 112) and weight > 0 and cpjh = #{cpjh,jdbcType=VARCHAR}
+	</select>
+
+	<update id="updateSaleFlagById" parameterType="java.util.Map">
+		update kc_tbCpkchzs set sale_flag = #{saleflag,jdbcType=VARCHAR} where id = #{id,jdbcType=VARCHAR}
+		and hz_month=convert(varchar(6), getdate(), 112) and weight > 0
+	</update>
+
 </mapper>
 
