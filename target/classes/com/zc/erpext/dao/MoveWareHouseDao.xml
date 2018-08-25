@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zc.erpext.dao.MoveWareHouseDao">
+
+    <select id="checkJhM" parameterType="java.util.Map" resultType="int">
+        select count(1) from kc_tbCpkchzs where weight >0 AND hz_month=convert(varchar(6), getdate(), 112)
+        and ckdd = #{ckdd_yc,jdbcType=VARCHAR}
+        and cpjh in
+        <foreach item="item" index="index" collection="cpjhs" open="(" separator="," close=")">
+            #{item.cpjh}
+        </foreach>
+    </select>
+
+    <select id="checkJh" parameterType="java.util.List" resultType="int">
+        select count(1) from kc_tbCpkchzs where weight >0 AND hz_month=convert(varchar(6), getdate(), 112)
+        and ckdd = #{ckdd_yc,jdbcType=VARCHAR}
+        and cpjh in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item.cpjh}
+        </foreach>
+    </select>
+
+    <select id="getMaxykno" resultType="java.lang.String">
+		select max(yk_no) from kc_tbCpyks where yk_no like 'ZCYK'+right(CONVERT (nvarchar(8),GETDATE(),112),6)+'%'
+	</select>
+
+    <select id="getDbDate" resultType="java.lang.String">
+        select CONVERT (nvarchar(8),GETDATE(),112)
+    </select>
+
+    <select id="getKcXxByCpjh" parameterType="java.util.Map" resultType="com.zc.erpext.entity.KcTbcpkchzs">
+        select top 1 * from kc_tbCpkchzs where weight >0 AND hz_month=convert(varchar(6), getdate(), 112)
+        and ckdd = #{ckdd_yc,jdbcType=VARCHAR}
+        and cpjh = #{cpjh,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getYkdIdByYkno" parameterType="java.lang.String" resultType="java.lang.Long">
+        select top 1 id from kc_tbCpyks where yk_no = #{ykno,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updateCkdd" parameterType="com.zc.erpext.entity.KcTbcpkchzs">
+        UPDATE kc_tbCpkchzs SET
+        ckdd = #{ckdd,jdbcType=VARCHAR},
+        ckqy = #{ckqy,jdbcType=VARCHAR},
+        update_user_no = #{update_user_no,jdbcType=VARCHAR},
+        update_datetime = getdate()
+        WHERE ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <insert id="insertCpyks" parameterType="java.util.Map">
+        INSERT INTO kc_tbCpyks
+        (yk_no, yk_date,  framework_no, ckdd_old, ckdd,  confirm_flag, company_id, create_user_no, create_datetime)
+        VALUES ( #{ykno,jdbcType=VARCHAR},  getdate(),  '00',  #{ckdd_yc,jdbcType=VARCHAR},  #{ckdd_yr,jdbcType=VARCHAR}, #{confirm_flag,jdbcType=VARCHAR}, 1, #{open_id,jdbcType=VARCHAR}, getdate());
+    </insert>
+
+    <insert id="insertCpykLines" parameterType="com.zc.erpext.entity.KcTbcpykLines">
+        INSERT INTO kc_tbCpyk_lines
+        (id
+        ,master_id
+        ,framework_no
+        ,cppm_no
+        ,cpgg_ply
+        ,cpgg_width
+        ,cpgg_length
+        ,cpgg_number
+        ,cpgg
+        ,quality_level
+        ,cpgg_add
+        ,cpjh
+        ,weight
+        ,prod_company
+        ,ckqy_old
+        ,ckqy
+        ,company_id
+        ,create_user_no
+        ,create_datetime)
+        VALUES
+        ((SELECT MAX (id) + 1 from kc_tbCpyk_lines where id < 50000000)
+        ,#{master_id,jdbcType=NUMERIC}
+        ,#{framework_no,jdbcType=VARCHAR}
+        ,#{cppm_no,jdbcType=VARCHAR}
+        ,#{cpgg_ply,jdbcType=NUMERIC}
+        ,#{cpgg_width,jdbcType=NUMERIC}
+        ,#{cpgg_length,jdbcType=NUMERIC}
+        ,#{cpgg_number,jdbcType=NUMERIC}
+        ,#{cpgg,jdbcType=VARCHAR}
+        ,#{quality_level,jdbcType=VARCHAR}
+        ,#{cpgg_add,jdbcType=VARCHAR}
+        ,#{cpjh,jdbcType=VARCHAR}
+        ,#{weight,jdbcType=NUMERIC}
+        ,#{prod_company,jdbcType=VARCHAR}
+        ,#{ckqy_old,jdbcType=VARCHAR}
+        ,#{ckqy,jdbcType=VARCHAR}
+        ,#{company_id,jdbcType=NUMERIC}
+        ,#{create_user_no,jdbcType=VARCHAR}
+        ,getdate())
+    </insert>
+
+    <select id="getUserNoByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT top 1 user_no from SYS_USER u where u.WX_OPEN_ID_ZC = #{open_id,jdbcType=VARCHAR}
+    </select>
+
+</mapper>
+

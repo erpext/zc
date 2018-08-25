@@ -181,7 +181,7 @@ public class WareHouseController {
             saleflag = (String) requestMap.get("saleflag");
 
             //获取wx_open_id_zc参数值
-            open_id = (String) requestMap.get("wx_open_id_zc");
+            open_id = (String) requestMap.get("open_id");
 
             // 校验用户openid是否正确
             String userNo = getUserNoByOpenId(open_id);
