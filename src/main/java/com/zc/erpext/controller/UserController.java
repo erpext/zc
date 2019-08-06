@@ -11,9 +11,7 @@ import com.zc.erpext.util.Result;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -24,6 +22,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
+
+@CrossOrigin(origins = "*", maxAge = 3600, methods = {RequestMethod.GET,RequestMethod.POST})
 @RestController
 @RequestMapping(value = "user")
 public class UserController {
@@ -44,10 +50,13 @@ public class UserController {
         return userService.getUser();
     }
 
+
     @RequestMapping(value = "/bindWx")
     public String bindWx(@RequestBody String requestBody, HttpServletRequest request) {
 
         try {
+//            Map<String, Object> mapType = JSON.parseObject(requestBody,Map.class);
+
             Map<String, Object> requestMap = mapper.readValue(requestBody, Map.class);
             String account; //账号
             String password; //密码
@@ -160,7 +169,6 @@ public class UserController {
 
     @RequestMapping(value = "/checkBind")
     public String checkBind(@RequestBody String requestBody, HttpServletRequest request) {
-
         try {
             Map<String, Object> requestMap = mapper.readValue(requestBody, Map.class);
             String wx_open_id_zc; //wx_open_id_zc
@@ -213,6 +221,119 @@ public class UserController {
             return "";
     }
 
+    //@CrossOrigin(origins = {"http://localhost:8086", "null"})
+    //@CrossOrigin(origins = "*", maxAge = 3600)    //改为全局配置
+    @RequestMapping(value = "/getWxConfig", method = RequestMethod.GET)
+    public String getWxConfig(@RequestParam("pageName") String pageName) {
+        //1、获取AccessToken
+        String accessToken = getAccessToken();
+
+        //2、获取Ticket
+        String jsapi_ticket = getTicket(accessToken);
+
+        //3、时间戳和随机字符串
+        String noncestr = UUID.randomUUID().toString().replace("-", "").substring(0, 16);//随机字符串
+        String timestamp = String.valueOf(System.currentTimeMillis() / 1000);//时间戳
+        System.out.println("accessToken:"+accessToken+"\njsapi_ticket:"+jsapi_ticket+"\n时间戳："+timestamp+"\n随机字符串："+noncestr);
+
+        //4、获取url
+        String url="http://www.erpext.cn/index2.html";
+        url = "http://" + pageName;
+        System.out.println("url domain:"+url);
+        /*根据JSSDK上面的规则进行计算，这里比较简单，我就手动写啦
+        String[] ArrTmp = {"jsapi_ticket","timestamp","nonce","url"};
+        Arrays.sort(ArrTmp);
+        StringBuffer sf = new StringBuffer();
+        for(int i=0;i<ArrTmp.length;i++){
+            sf.append(ArrTmp[i]);
+        }
+        */
+
+        //5、将参数排序并拼接字符串
+        String str = "jsapi_ticket="+jsapi_ticket+"&noncestr="+noncestr+"&timestamp="+timestamp+"&url="+url;
+        //6、将字符串进行sha1加密
+        String signature =SHA1(str);
+        System.out.println("签名参数："+str+"\n签名："+signature);
+
+        Map result = new HashMap();
+        result.put("result", "OK");
+        List list = new ArrayList();
+        Map ngData = new HashMap();
+
+        String appId="ww407df9674da5c8f7";//企业ID
+        String secret="_MLl50OalyL_2jzfhaWE1PnvjCsmSNFGat4vkMNbKzQ";//第三方用户唯一凭证密钥，即appsecret
+        String agentId="1000002";   //
+        ngData.put("appId", appId);
+        ngData.put("secret", secret);
+        ngData.put("agentId", agentId);
+        ngData.put("accessToken", accessToken);
+        ngData.put("jsapi_ticket", jsapi_ticket);
+        ngData.put("noncestr", noncestr);
+        ngData.put("timestamp", timestamp);
+        ngData.put("signature", signature);
+        ngData.put("url domain", url);
+
+        list.add(ngData);
+        result.put("ngData", list);
+
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(result);
+        } catch (JsonProcessingException e) {
+
+        }
+        logger.info(json);
+        return json;
+    }
+
+    @RequestMapping(value = "/getWxUserId", method = RequestMethod.GET)
+    public String getWxUserId(@RequestParam("code") String code) {
+        //1、获取AccessToken
+        String accessToken = getAccessToken();
+        String wxUserId = "";
+        String url = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token="+accessToken+"&code="+code;
+        try {
+            URL urlGet = new URL(url);
+            HttpURLConnection http = (HttpURLConnection) urlGet.openConnection();
+            http.setRequestMethod("GET"); // 必须是get方式请求
+            http.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+            http.setDoOutput(true);
+            http.setDoInput(true);
+            System.setProperty("sun.net.client.defaultConnectTimeout", "30000");// 连接超时30秒
+            System.setProperty("sun.net.client.defaultReadTimeout", "30000"); // 读取超时30秒
+            http.connect();
+            InputStream is = http.getInputStream();
+            int size = is.available();
+            byte[] jsonBytes = new byte[size];
+            is.read(jsonBytes);
+            String message = new String(jsonBytes, "UTF-8");
+            JSONObject demoJson = JSONObject.fromObject(message);
+            System.out.println("USER INFO JSON字符串："+demoJson);
+            wxUserId = demoJson.getString("UserId");
+            System.out.println("USER ID：" + wxUserId);
+            is.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Map result = new HashMap();
+        result.put("result", "OK");
+        List list = new ArrayList();
+        Map ngData = new HashMap();
+        ngData.put("UserId", wxUserId);
+        list.add(ngData);
+        result.put("ngData", list);
+
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(wxUserId);
+        } catch (JsonProcessingException e) {
+
+        }
+        logger.info(json);
+        return json;
+    }
+
     private String reResult(Result r, Error error) {
         String json = null;
         try {
@@ -247,5 +368,122 @@ public class UserController {
             return null;
         }
     }
+
+    /*
+    getAccessToken
+     */
+    public static String getAccessToken() {
+        String access_token = "";
+        String AppId="ww407df9674da5c8f7";//第三方用户唯一凭证
+        String secret="_MLl50OalyL_2jzfhaWE1PnvjCsmSNFGat4vkMNbKzQ";//第三方用户唯一凭证密钥，即appsecret
+        //这个url链接地址和参数皆不能变
+        String url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid="+AppId+"&corpsecret="+secret;
+        //https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwddb0e7774f572a20&corpsecret=8rhmwS9roAWDGX6ma-5F7wv1RLTI0sz98BWo37JwCsQ
+        try {
+            URL urlGet = new URL(url);
+            HttpURLConnection http = (HttpURLConnection) urlGet.openConnection();
+            http.setRequestMethod("GET"); // 必须是get方式请求
+            http.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+            http.setDoOutput(true);
+            http.setDoInput(true);
+            System.setProperty("sun.net.client.defaultConnectTimeout", "30000");// 连接超时30秒
+            System.setProperty("sun.net.client.defaultReadTimeout", "30000"); // 读取超时30秒
+            http.connect();
+            InputStream is = http.getInputStream();
+            int size = is.available();
+            byte[] jsonBytes = new byte[size];
+            is.read(jsonBytes);
+            String message = new String(jsonBytes, "UTF-8");
+            JSONObject demoJson = JSONObject.fromObject(message);
+            System.out.println("JSON字符串："+demoJson);
+            access_token = demoJson.getString("access_token");
+            is.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return access_token;
+    }
+
+    /*
+    获取jsapi_ticket
+     */
+    public static String getTicket(String access_token) {
+        String ticket = null;
+        String url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token="+ access_token;//这个url链接和参数不能变
+        try {
+            URL urlGet = new URL(url);
+            HttpURLConnection http = (HttpURLConnection) urlGet.openConnection();
+            http.setRequestMethod("GET"); // 必须是get方式请求
+            http.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+            http.setDoOutput(true);
+            http.setDoInput(true);
+            System.setProperty("sun.net.client.defaultConnectTimeout", "30000");// 连接超时30秒
+            System.setProperty("sun.net.client.defaultReadTimeout", "30000"); // 读取超时30秒
+            http.connect();
+            InputStream is = http.getInputStream();
+            int size = is.available();
+            byte[] jsonBytes = new byte[size];
+            is.read(jsonBytes);
+            String message = new String(jsonBytes, "UTF-8");
+            JSONObject demoJson = JSONObject.fromObject(message);
+            System.out.println("JSON字符串："+demoJson);
+            ticket = demoJson.getString("ticket");
+            is.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ticket;
+    }
+
+    public static String SHA1(String decript) {
+        try {
+            MessageDigest digest = java.security.MessageDigest.getInstance("SHA-1");
+            digest.update(decript.getBytes());
+            byte messageDigest[] = digest.digest();
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            // 字节数组转换为 十六进制 数
+            for (int i = 0; i < messageDigest.length; i++) {
+                String shaHex = Integer.toHexString(messageDigest[i] & 0xFF);
+                if (shaHex.length() < 2) {
+                    hexString.append(0);
+                }
+                hexString.append(shaHex);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * 获得指定数目的UUID
+     * @param number int 需要获得的UUID数量
+     * @return String[] UUID数组
+     */
+    public static String[] getUUID(int number){
+        if(number < 1){
+            return null;
+        }
+        String[] retArray = new String[number];
+        for(int i=0;i<number;i++){
+            retArray[i] = getUUID();
+        }
+        return retArray;
+    }
+
+    /**
+     * 获得一个UUID
+     * @return String UUID
+     */
+    public static String getUUID(){
+        String uuid = UUID.randomUUID().toString();
+        //去掉“-”符号
+        return uuid.replaceAll("-", "");
+    }
+
+
 
 }

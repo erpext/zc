@@ -8,7 +8,11 @@ import com.zc.erpext.entity.User;
 public interface UserService {
 	List<User> getUser();
 
-    List<User> bindWx();
+    List<User>  bindWx();
+
+    List<User> getWxConfig();
+
+    List<User> getWxUserId();
 
     SysUser getById(String account);
 

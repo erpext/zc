@@ -25,6 +25,16 @@ public class UserServiceImple implements UserService {
         return null;
     }
 
+    @Override
+    public List<User> getWxConfig() {
+        return null;
+    }
+
+    @Override
+    public List<User> getWxUserId() {
+        return null;
+    }
+
     /**
      * 用于查询用户做校验
      *

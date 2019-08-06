@@ -25,6 +25,7 @@ import java.util.Map;
  * <p>
  * 移库 -  移出
  */
+@CrossOrigin(origins = "*", maxAge = 3600,methods = {RequestMethod.GET,RequestMethod.POST})
 @RestController
 @RequestMapping(value = "moveout")
 public class MoveOutController {

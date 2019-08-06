@@ -24,6 +24,7 @@ import java.util.Map;
  * <p>
  * 移库 -  库内
  */
+@CrossOrigin(origins = "*", maxAge = 3600,methods = {RequestMethod.GET,RequestMethod.POST})
 @RestController
 @RequestMapping(value = "movein")
 public class MoveInController {
