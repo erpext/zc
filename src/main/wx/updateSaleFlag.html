@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <title>更新产品销售日志</title>
+    <!--引用微信JS库-->
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <!--引用jQuery库-->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+    <style>
+        #page {
+            background-color: #FFF;
+        }
+
+        .head {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 0;
+        }
+
+        .head .title {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .head .last {
+            margin-left: 50px;
+        }
+
+        .sub_title {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .item_wrapper {
+            flex: 1;
+        }
+
+        .input_item {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .input_item .scan {
+            display: flex;
+            flex-direction: row;
+            width: 80%;
+            padding: 5px 10px;
+            border: lightgrey 1px solid;
+            border-radius: 8px;
+        }
+
+        .input_item .scan .num {
+            flex: 1;
+            font-size: 14px;
+            color: lightgrey;
+        }
+
+        .input_item .del {
+            margin-left: 10px;
+            font-size: 16px;
+            color: grey;
+        }
+
+        .confirm {
+            background-color: blue;
+            height: 40;
+            width: 90%;
+            margin: 30px auto;
+            padding: 10px 0;
+            text-align: center;
+            color: #FFF;
+            border-radius: 5px;
+        }
+        .video_wrapper{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        #video{
+            width: 200px;
+            background-color: gray;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+<script>
+    //alert('wx.config start!');
+    //http://pingqa.erpext.cn:8083/user/getWxConfig?page=www.erpext.cn/updateSaleFlag.html
+    //http://localhost:8083/user/getWxConfig?page=www.erpext.cn/updateSaleFlag.html
+    $.ajax({
+        type: 'GET',
+        url: 'http://pingqa.erpext.cn:8083/user/getWxConfig?pageName=www.erpext.cn/updateSaleFlag.html',
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json',
+        success: function (data) {
+            console.log(JSON.stringify(data));
+
+            let res = data.ngData[0];
+            //alert(res.timestamp);
+            //alert(res.noncestr);
+            //alert(res.signature);
+            wx.config({
+                // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                debug: false,
+                // 必填，公众号的唯一标识
+                appId: res.appId,
+                // 必填，生成签名的时间戳
+                timestamp: res.timestamp,
+                // 必填，生成签名的随机串
+                nonceStr: res.noncestr,
+                // 必填，签名
+                signature: res.signature,
+                // 必填，需要使用的JS接口列表
+                jsApiList: ['checkJsApi', 'scanQRCode']
+            });
+            
+            //alert('3.wx.scanQRCode done')
+        },
+        error: function () {
+            alert("获取配置参数失败，请稍候再试!");
+        }
+    })  
+    //alert('wx.config OK')
+
+    function myfunction() {
+        //alert(window.location.href) 
+        wx.scanQRCode({
+            needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+            scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+            success: function (res) {
+                var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                alert('扫描结果:'+result);
+            }
+        });
+    }
+</script>
+
+<body>
+    <div id="page">
+
+        <form class="head">
+            <input type="radio" name="sale_able" value="access" checked>
+            <div class="title">不可销售</div>
+            </input>
+            <input class="title last" type="radio" name="sale_able" value="unaccess">
+            <div class="title">可销售</div>
+            </input>
+        </form>
+
+        <div class="sub_title">卷号扫码</div>
+
+        <div class="item_wrapper">
+
+            <div class="input_item" id="scan_1" onclick="myfunction()">
+                <div class="scan">
+                    <div class="num">请点此进行扫码</div>
+                    <div>icon</div>
+                </div>
+                <div class="del">删除</div>
+            </div>
+
+            <div class="input_item" id="scan_2" onclick="myfunction()">
+                <div class="scan">
+                    <div class="num">请点此进行扫码</div>
+                    <div>icon</div>
+                </div>
+                <div class="del">删除</div>
+            </div>
+
+            <div class="input_item" id="scan_3" onclick="myfunction()">
+                <div class="scan">
+                    <div class="num">请点此进行扫码</div>
+                    <div>icon</div>
+                </div>
+                <div class="del">删除</div>
+            </div>
+
+            <div class="input_item" id="scan_4" onclick="myfunction()">
+                <div class="scan">
+                    <div class="num">请点此进行扫码</div>
+                    <div>icon</div>
+                </div>
+                <div class="del">删除</div>
+            </div>
+
+        </div>
+
+        <div class="confirm">批量更新</div>
+
+    </div>
+
+
+</body>
+
+</html>

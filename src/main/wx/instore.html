@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+	<meta charset="utf-8">
+	<title>移入库(仓库区域调整)</title>
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=contain">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+
+<body>
+
+	<div id="instore" class="store">
+		<div class="head">
+			<a href="javascript:history.back(-1)"><img src="./imgs/back.png"></a>
+			<div class="title">移入库(仓库区域调整)</div>
+		</div>
+
+		<div class="select">
+			<div class="item">
+				<div class="title">移入库: </div>
+				<div class="wrapper">
+					<select id="in_store" name="in_store">	
+					</select>
+					<img src="./imgs/arrow_down.png">
+				</div>
+			</div>
+			<div class="item">
+				<div class="title">库  位: </div>
+				<div class="wrapper">
+					<select id="store_site" name="store_site">
+
+					</select>
+					<img src="./imgs/arrow_down.png">
+				</div>
+			</div>
+		</div>
+
+		<div class="qrnumbers">
+			<div class="title">卷号扫码</div>
+			<div class="input_item">
+				<div class="scan">
+					<input id="num_1" type="text" value="" placeholder="请输入单号"/>
+					<img onclick="scanClick(1)" src="./imgs/qrScan.png">
+				</div>
+				<div class="del" onclick="deleteClick(1)">
+					<img src="./imgs/delete.png">
+				</div>
+			</div>
+			<div class="input_item">
+				<div class="scan">
+					<input id="num_2" type="text" value="" placeholder="请输入单号"/>
+					<img onclick="scanClick(2)" src="./imgs/qrScan.png">
+				</div>
+				<div class="del" onclick="deleteClick(2)">
+					<img src="./imgs/delete.png">
+				</div>
+			</div>
+			<div class="input_item">
+				<div class="scan">
+					<input id="num_3" type="text" value="" placeholder="请输入单号"/>
+					<img onclick="scanClick(3)" src="./imgs/qrScan.png">
+				</div>
+				<div class="del" id="del3" onclick="deleteClick(3)">
+					<img src="./imgs/delete.png">
+				</div>
+			</div>
+			<div class="input_item">
+				<div class="scan">
+					<input id="num_4" type="text" value="" placeholder="请输入单号"/>
+					<img onclick="scanClick(4)" src="./imgs/qrScan.png">
+				</div>
+				<div class="del" id="del4" onclick="deleteClick(4)">
+					<img src="./imgs/delete.png">
+				</div>
+			</div>
+			<div class="confirm" onclick="confirmClick()">确定移入</div>
+		</div>
+	</div>
+
+	<script src="jquery.min.js"></script>
+	<script type="text/javascript" src="js/const.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/instore.js"></script>
+</body>
+
+</html>

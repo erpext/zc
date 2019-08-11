@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+	<meta charset="utf-8">
+	<title>更新产品销售标志</title>
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=contain">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+
+<body>
+
+	<div id="updateflag" class="store">
+		<div class="head">
+			<a href="javascript:history.back(-1)"><img src="./imgs/back.png"></a>
+			<div class="title">更新产品销售标志</div>
+		</div>
+
+		<form class="choose" id="sale_choose">
+			<input type="radio" name="sale_able" value="false" checked>
+			<div class="title">不可销售</div>
+			</input>
+			<input class="title last" type="radio" name="sale_able" value="true">
+			<div class="title">可销售</div>
+			</input>
+		</form>
+
+		<div class="qrnumbers">
+			<div class="title">卷号扫码</div>
+			<div class="input_item">
+				<div class="scan">
+					<input id="num_1" type="text" value="" placeholder="请输入单号" />
+					<img onclick="scanClick(1)" src="./imgs/qrScan.png">
+				</div>
+				<div class="del" onclick="deleteClick(1)">
+					<img src="./imgs/delete.png">
+				</div>
+			</div>
+			<div class="input_item">
+				<div class="scan">
+					<input id="num_2" type="text" value="" placeholder="请输入单号" />
+					<img onclick="scanClick(2)" src="./imgs/qrScan.png">
+				</div>
+				<div class="del" onclick="deleteClick(2)">
+					<img src="./imgs/delete.png">
+				</div>
+			</div>
+			<div class="input_item">
+				<div class="scan">
+					<input id="num_3" type="text" value="" placeholder="请输入单号" />
+					<img onclick="scanClick(3)" src="./imgs/qrScan.png">
+				</div>
+				<div class="del" id="del3" onclick="deleteClick(3)">
+					<img src="./imgs/delete.png">
+				</div>
+			</div>
+			<div class="input_item">
+				<div class="scan">
+					<input id="num_4" type="text" value="" placeholder="请输入单号" />
+					<img onclick="scanClick(4)" src="./imgs/qrScan.png">
+				</div>
+				<div class="del" id="del4" onclick="deleteClick(4)">
+					<img src="./imgs/delete.png">
+				</div>
+			</div>
+			<div class="confirm" onclick="confirmClick()">确定移入</div>
+		</div>
+	</div>
+
+	<script src="jquery.min.js"></script>
+	<script type="text/javascript" src="js/const.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/updateflag.js"></script>
+</body>
+
+</html>
