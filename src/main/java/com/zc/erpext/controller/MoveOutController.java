@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import java.util.Map;
  */
 @CrossOrigin(origins = "*", maxAge = 3600,methods = {RequestMethod.GET,RequestMethod.POST})
 @RestController
-@RequestMapping(value = "moveout")
+@RequestMapping(value = "erpext/moveout")
 public class MoveOutController {
 
     private static final Log logger = LogFactory.getLog(MoveOutController.class);
@@ -55,20 +56,37 @@ public class MoveOutController {
     //事务处理
     String moveout(@RequestBody String requestBody, HttpServletRequest request) throws IOException {
         try {
-            Map<String, Object> requestMap = mapper.readValue(requestBody, Map.class);
+            System.out.println("***********************************************" );
+            System.out.println("********Move Out start*************************" );
+            System.out.println("***********************************************" );
+            //String wxUserId = userService.getWxUserIdFromCookie(request);
+            String wxUserId=null;
+            System.out.println("********getWxUserIdFromCookie start");
+            Cookie[] cookies =  request.getCookies();
+            if(cookies != null){
+                for(Cookie cookie : cookies){
+                    if(cookie.getName().equals("wxUserId")){
+                        wxUserId = cookie.getValue();
+                        System.out.println("********wxUserId (MoveOutController) 1=" + wxUserId);
+                    }
+                }
+            }
+            //tbd:cookie timeout
+            System.out.println("********wxUserId (MoveOutController) 2:" + wxUserId);
 
+            Map<String, Object> requestMap = mapper.readValue(requestBody, Map.class);
             List<Map> cpjhlist = new ArrayList<>(); //卷号
             String ckdd_yc; //移出仓库
             String ckdd_yr; //移入仓库
-            String open_id;
-
             //获取参数值
             cpjhlist = (ArrayList<Map>) requestMap.get("cpjhlist"); //卷号
             ckdd_yc = (String) requestMap.get("ckdd_yc");
             ckdd_yr = (String) requestMap.get("ckdd_yr");
-            open_id = (String) requestMap.get("open_id");
 
-            if (cpjhlist.size() == 0 || ("").equals(ckdd_yc) || ("").equals(ckdd_yr) || ("").equals(open_id)) {
+            System.out.println("********ckdd_yc=" + ckdd_yc);
+            System.out.println("********ckdd_yr=" + ckdd_yr);
+
+            if (cpjhlist.size() == 0 || ("").equals(ckdd_yc) || ("").equals(ckdd_yr)) {
                 //返回 NG
                 //{"result":"NG","ngData":[{"msg":"卷号没有找到","code":"002"}]}
                 Map result = new HashMap();
@@ -89,8 +107,8 @@ public class MoveOutController {
                 return json;
             }
 
-            // 校验用户openid是否正确
-            String userNo = getUserNoByOpenId(open_id);
+            // 校验用户wxUserId是否正确
+            String userNo = getUserNoByOpenId(wxUserId);
             if (null == userNo || ("").equals(userNo)) {
                 Map result = new HashMap();
                 result.put("result", "NG");

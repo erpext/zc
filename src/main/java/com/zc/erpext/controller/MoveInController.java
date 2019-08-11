@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @CrossOrigin(origins = "*", maxAge = 3600,methods = {RequestMethod.GET,RequestMethod.POST})
 @RestController
-@RequestMapping(value = "movein")
+@RequestMapping(value = "erpext/movein")
 public class MoveInController {
 
     private static final Log logger = LogFactory.getLog(MoveInController.class);

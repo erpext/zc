@@ -18,7 +18,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600,methods = {RequestMethod.GET,RequestMethod.POST})
 @RestController
-@RequestMapping(value = "warehouse")
+@RequestMapping(value = "erpext/warehouse")
 public class WareHouseController {
 
     private static final Log logger = LogFactory.getLog(WareHouseController.class);
@@ -35,18 +35,12 @@ public class WareHouseController {
         mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
     }
 
-/*    @RequestMapping(value = "/listWareHouse")
-    public List<WareHouse> lisWareHouse() {
-        return wareHouseService.getWareHouse();
-    }*/
-
-    @RequestMapping(value = "/listWareHouse")
-    public String lisWareHouse(@RequestBody String requestBody, HttpServletRequest request) {
+    @RequestMapping(value = "/listWareHouse",method = RequestMethod.GET)
+    public String lisWareHouse() {
         try {
-            Map<String, Object> requestMap = mapper.readValue(requestBody, Map.class);
-            logger.info("请求参数 ===> " + requestMap);
-            String open_id; //wx_open_id_zc
-            open_id = (String) requestMap.get("open_id");
+            //Map<String, Object> requestMap = mapper.readValue(requestBody, Map.class);
+            //logger.info("请求参数 ===> " + requestMap);
+            System.out.println("********lisWareHouse start" );
 
             List lst = wareHouseService.getWareHouse();
             if (lst != null && lst.size() > 0) {
@@ -80,7 +74,6 @@ public class WareHouseController {
                 }
                 logger.info(json);
                 return json;
-
             }
 
         } catch (Exception e) {
@@ -90,7 +83,7 @@ public class WareHouseController {
 
     }
 
-    @RequestMapping(value = "/listWareHouseDetail")
+    @RequestMapping(value = "/listWareHouseDetail",method = RequestMethod.GET)
     public String listWareHouseDetail(@RequestBody String requestBody, HttpServletRequest request) {
 
         try {
@@ -157,7 +150,7 @@ public class WareHouseController {
         return "";
     }
 
-    @RequestMapping(value = "/updateSaleFlag")
+    @RequestMapping(value = "/updateSaleFlag",method = RequestMethod.GET)
     public String updateSaleFlag(@RequestBody String requestBody, HttpServletRequest request) {
 
         try {

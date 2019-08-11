@@ -13,7 +13,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -31,7 +33,7 @@ import java.util.UUID;
 
 @CrossOrigin(origins = "*", maxAge = 3600, methods = {RequestMethod.GET,RequestMethod.POST})
 @RestController
-@RequestMapping(value = "user")
+@RequestMapping(value = "erpext/user")
 public class UserController {
 
     private static final Log logger = LogFactory.getLog(UserController.class);
@@ -50,6 +52,49 @@ public class UserController {
         return userService.getUser();
     }
 
+    @RequestMapping(value = "/getCookieUserId",method = RequestMethod.GET)
+    public  String getCookieUserId(HttpServletRequest request){
+        String wxUserId = getWxUserIdFromCookie(request);
+
+
+        Map result = new HashMap();
+        if(wxUserId != null && wxUserId.length() != 0) {
+            result.put("result", "OK");
+            result.put("wxUserId", wxUserId);
+        }else
+        {
+           result.put("result", "NG");
+           result.put("wxUserId", "");
+        }
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(result);
+        } catch (JsonProcessingException e) {
+
+        }
+        logger.info(json);
+        return json;
+    }
+
+    public String getWxUserIdFromCookie(HttpServletRequest request) {
+        //HttpServletRequest 装请求信息类
+        //HttpServletRespionse 装相应信息的类
+        //Cookie cookie=new Cookie("sessionId","CookieTestInfo");
+        String wxUserId=null;
+        System.out.println("********getCookieUserId start");
+        Cookie[] cookies =  request.getCookies();
+        if(cookies != null){
+            for(Cookie cookie : cookies){
+                if(cookie.getName().equals("wxUserId")){
+                    wxUserId = cookie.getValue();
+                    System.out.println("********wxUserId (UserController) 1=" + wxUserId);
+                    //return wxUserId;
+                }
+            }
+        }
+        System.out.println("********wxUserId (UserController) 2:" + wxUserId);
+        return wxUserId;
+    }
 
     @RequestMapping(value = "/bindWx")
     public String bindWx(@RequestBody String requestBody, HttpServletRequest request) {
@@ -184,7 +229,7 @@ public class UserController {
                 List list = new ArrayList();
                 Map ngData = new HashMap();
                 ngData.put("code", "0006");
-                ngData.put("msg", "微信帐号未绑定!");
+                ngData.put("msg", "微信帐号未映射ERP帐号!");
                 list.add(ngData);
                 result.put("ngData", list);
                 String json = null;
@@ -221,7 +266,6 @@ public class UserController {
             return "";
     }
 
-    //@CrossOrigin(origins = {"http://localhost:8086", "null"})
     //@CrossOrigin(origins = "*", maxAge = 3600)    //改为全局配置
     @RequestMapping(value = "/getWxConfig", method = RequestMethod.GET)
     public String getWxConfig(@RequestParam("pageName") String pageName) {
@@ -286,10 +330,9 @@ public class UserController {
         return json;
     }
 
-    @RequestMapping(value = "/getWxUserId", method = RequestMethod.GET)
-    public String getWxUserId(@RequestParam("code") String code) {
-        //1、获取AccessToken
-        String accessToken = getAccessToken();
+    @RequestMapping(value = "/getWxUserIdByCode", method = RequestMethod.GET)
+    public String getWxUserIdByCode(HttpServletResponse response,@RequestParam("code") String code) {
+        String accessToken = getAccessToken();  //获取AccessToken
         String wxUserId = "";
         String url = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token="+accessToken+"&code="+code;
         try {
@@ -309,26 +352,25 @@ public class UserController {
             String message = new String(jsonBytes, "UTF-8");
             JSONObject demoJson = JSONObject.fromObject(message);
             System.out.println("USER INFO JSON字符串："+demoJson);
-            wxUserId = demoJson.getString("UserId");
-            System.out.println("USER ID：" + wxUserId);
+            if(demoJson.has("UserId")){
+                wxUserId = demoJson.getString("UserId");
+                System.out.println("USER ID：" + wxUserId);
+                Cookie cookie=new Cookie("wxUserId",wxUserId);
+                response.addCookie(cookie);
+            }else
+            {
+                wxUserId = "NG_UnauthorizedUser";
+            }
             is.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        Map result = new HashMap();
-        result.put("result", "OK");
-        List list = new ArrayList();
-        Map ngData = new HashMap();
-        ngData.put("UserId", wxUserId);
-        list.add(ngData);
-        result.put("ngData", list);
-
         String json = null;
         try {
             json = mapper.writeValueAsString(wxUserId);
         } catch (JsonProcessingException e) {
-
+            return null;
         }
         logger.info(json);
         return json;
@@ -369,7 +411,7 @@ public class UserController {
         }
     }
 
-    /*
+    /**
     getAccessToken
      */
     public static String getAccessToken() {
@@ -404,7 +446,7 @@ public class UserController {
         return access_token;
     }
 
-    /*
+    /**
     获取jsapi_ticket
      */
     public static String getTicket(String access_token) {

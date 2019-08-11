@@ -5,6 +5,8 @@ import java.util.List;
 import com.zc.erpext.entity.SysUser;
 import com.zc.erpext.entity.User;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface UserService {
 	List<User> getUser();
 
@@ -12,7 +14,9 @@ public interface UserService {
 
     List<User> getWxConfig();
 
-    List<User> getWxUserId();
+    List<User> getWxUserIdByCode();
+
+    List<User> getCookieUserId();
 
     SysUser getById(String account);
 

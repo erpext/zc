@@ -7,6 +7,7 @@ import com.zc.erpext.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service(value = "UserService")
@@ -31,7 +32,12 @@ public class UserServiceImple implements UserService {
     }
 
     @Override
-    public List<User> getWxUserId() {
+    public List<User> getWxUserIdByCode() {
+        return null;
+    }
+
+    @Override
+    public List<User> getCookieUserId() {
         return null;
     }
 
