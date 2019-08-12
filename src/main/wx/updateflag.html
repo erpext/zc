@@ -19,10 +19,10 @@
 		</div>
 
 		<form class="choose" id="sale_choose">
-			<input type="radio" name="sale_able" value="false" checked>
+			<input type="radio" name="sale_able" value="false">
 			<div class="title">不可销售</div>
 			</input>
-			<input class="title last" type="radio" name="sale_able" value="true">
+			<input class="title last" type="radio" name="sale_able" value="true" checked>
 			<div class="title">可销售</div>
 			</input>
 		</form>
@@ -31,7 +31,7 @@
 			<div class="title">卷号扫码</div>
 			<div class="input_item">
 				<div class="scan">
-					<input id="num_1" type="text" value="" placeholder="请输入单号" />
+					<input id="num_1" type="text" value="" placeholder="请输入卷号" />
 					<img onclick="scanClick(1)" src="./imgs/qrScan.png">
 				</div>
 				<div class="del" onclick="deleteClick(1)">
@@ -40,7 +40,7 @@
 			</div>
 			<div class="input_item">
 				<div class="scan">
-					<input id="num_2" type="text" value="" placeholder="请输入单号" />
+					<input id="num_2" type="text" value="" placeholder="请输入卷号" />
 					<img onclick="scanClick(2)" src="./imgs/qrScan.png">
 				</div>
 				<div class="del" onclick="deleteClick(2)">
@@ -49,7 +49,7 @@
 			</div>
 			<div class="input_item">
 				<div class="scan">
-					<input id="num_3" type="text" value="" placeholder="请输入单号" />
+					<input id="num_3" type="text" value="" placeholder="请输入卷号" />
 					<img onclick="scanClick(3)" src="./imgs/qrScan.png">
 				</div>
 				<div class="del" id="del3" onclick="deleteClick(3)">
@@ -58,7 +58,7 @@
 			</div>
 			<div class="input_item">
 				<div class="scan">
-					<input id="num_4" type="text" value="" placeholder="请输入单号" />
+					<input id="num_4" type="text" value="" placeholder="请输入卷号" />
 					<img onclick="scanClick(4)" src="./imgs/qrScan.png">
 				</div>
 				<div class="del" id="del4" onclick="deleteClick(4)">

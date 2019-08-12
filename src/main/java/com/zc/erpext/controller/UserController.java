@@ -53,9 +53,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/getCookieUserId",method = RequestMethod.GET)
-    public  String getCookieUserId(HttpServletRequest request){
+    public String getCookieUserId(HttpServletRequest request){
         String wxUserId = getWxUserIdFromCookie(request);
-
 
         Map result = new HashMap();
         if(wxUserId != null && wxUserId.length() != 0) {
@@ -81,9 +80,12 @@ public class UserController {
         //HttpServletRespionse 装相应信息的类
         //Cookie cookie=new Cookie("sessionId","CookieTestInfo");
         String wxUserId=null;
-        System.out.println("********getCookieUserId start");
+        System.out.println("***********************************************" );
+        System.out.println("********getWxUserIdFromCookie******************" );
+        System.out.println("***********************************************" );
         Cookie[] cookies =  request.getCookies();
         if(cookies != null){
+            System.out.println("********Cookie is not null*********************" );
             for(Cookie cookie : cookies){
                 if(cookie.getName().equals("wxUserId")){
                     wxUserId = cookie.getValue();
@@ -91,6 +93,10 @@ public class UserController {
                     //return wxUserId;
                 }
             }
+        }else {
+            System.out.println("***********************************************" );
+            System.out.println("********Cookie is null*************************" );
+            System.out.println("***********************************************" );
         }
         System.out.println("********wxUserId (UserController) 2:" + wxUserId);
         return wxUserId;

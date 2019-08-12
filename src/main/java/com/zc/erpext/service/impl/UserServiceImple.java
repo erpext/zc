@@ -36,10 +36,10 @@ public class UserServiceImple implements UserService {
         return null;
     }
 
-    @Override
-    public List<User> getCookieUserId() {
-        return null;
-    }
+//    @Override
+//    public List<User> getCookieUserId() {
+//        return null;
+//    }
 
     /**
      * 用于查询用户做校验

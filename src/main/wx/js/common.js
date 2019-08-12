@@ -3,6 +3,7 @@ $(function() {
     console.log('页面初始化好啦');
     //alert('页面初始化好啦')
     //alert(InterfaceDomain)
+    //alert(CurrentLoginUser);
     $.ajax({
         type: 'GET',
         url: InterfaceDomain + '/user/getCookieUserId',
@@ -14,7 +15,8 @@ $(function() {
             //alert(data.wxUserId);
             if (data.result == "OK"){
                 console.log(data);
-                alert('(已登录)欢迎你：'+ data.wxUserId)
+                //alert('(已登录)欢迎你：'+ data.wxUserId);
+                CurrentLoginUser = data.wxUserId;
             }else{
                 //Cookie取不到用户信息，跳回首页
                 window.location.href="/getWxUserIdinit.html";

@@ -16,7 +16,7 @@ public interface UserService {
 
     List<User> getWxUserIdByCode();
 
-    List<User> getCookieUserId();
+    //List<User> getCookieUserId();
 
     SysUser getById(String account);
 

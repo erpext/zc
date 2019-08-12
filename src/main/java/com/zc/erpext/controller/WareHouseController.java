@@ -150,7 +150,7 @@ public class WareHouseController {
         return "";
     }
 
-    @RequestMapping(value = "/updateSaleFlag",method = RequestMethod.GET)
+    @RequestMapping(value = "/updateSaleFlag",method = RequestMethod.POST)
     public String updateSaleFlag(@RequestBody String requestBody, HttpServletRequest request) {
 
         try {
@@ -166,24 +166,27 @@ public class WareHouseController {
              */
 
             String saleflag; //ckdd
-            String open_id; //wx_open_id_zc
+            String wxUserId;
             List<Map> cpjhlist = new ArrayList<>(); //卷号
 
             //获取account参数值
             saleflag = (String) requestMap.get("saleflag");
 
             //获取wx_open_id_zc参数值
-            open_id = (String) requestMap.get("open_id");
+            wxUserId = (String) requestMap.get("currentLoginUser");
+
+            System.out.println("********saleflag=" + saleflag);
+            System.out.println("********wxUserId=" + wxUserId);
 
             // 校验用户openid是否正确
-            String userNo = getUserNoByOpenId(open_id);
+            String userNo = getUserNoByOpenId(wxUserId);
             if (null == userNo || ("").equals(userNo)) {
                 Map result = new HashMap();
                 result.put("result", "NG");
                 List list = new ArrayList();
                 Map ngData = new HashMap();
                 ngData.put("code", "005");
-                ngData.put("msg", "open id 不正确!");
+                ngData.put("msg", "微信帐号"+wxUserId+"与ERP帐号未绑定!");
                 list.add(ngData);
                 result.put("ngData", list);
                 String json = null;
