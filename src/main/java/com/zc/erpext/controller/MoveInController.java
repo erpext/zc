@@ -63,22 +63,27 @@ public class MoveInController {
             List<Map> cpjhlist = new ArrayList<>(); //卷号
             String ckdd_yc; //移出仓库
             String ckqy; //仓库区域
-            String open_id;
+            String wxUserId;   //
 
             //获取参数值
             cpjhlist = (ArrayList<Map>) requestMap.get("cpjhlist"); //卷号
             ckdd_yc = (String) requestMap.get("ckdd_yc");
             ckqy = (String) requestMap.get("ckqy");
-            open_id = (String) requestMap.get("open_id");
+            wxUserId = (String) requestMap.get("currentLoginUser");
+            ckdd_yc = ckdd_yc.trim();
 
-            if (cpjhlist.size() == 0 || ("").equals(ckdd_yc) || ("").equals(open_id) || ("").equals(ckqy)) {
+            System.out.println("***********************************************" );
+            System.out.println("********ckdd_yc=" + ckdd_yc + ",ckqy=" + ckqy + ",wxUserId=" + wxUserId);
+            System.out.println("***********************************************" );
+
+            if (cpjhlist.size() == 0 || ("").equals(ckdd_yc) || ("").equals(wxUserId) || ("").equals(ckqy)) {
                 //返回 NG
                 //{"result":"NG","ngData":[{"msg":"卷号没有找到","code":"002"}]}
                 Map result = new HashMap();
                 result.put("result", "NG");
                 List list = new ArrayList();
                 Map ngData = new HashMap();
-                ngData.put("code", "0003");
+                ngData.put("code", "003");
                 ngData.put("msg", "参数不正确!");
                 list.add(ngData);
                 result.put("ngData", list);
@@ -92,14 +97,14 @@ public class MoveInController {
                 return json;
             }
             // 校验用户openid是否正确
-            String userNo = getUserNoByOpenId(open_id);
+            String userNo = getUserNoByOpenId(wxUserId);
             if (null == userNo || ("").equals(userNo)) {
                 Map result = new HashMap();
                 result.put("result", "NG");
                 List list = new ArrayList();
                 Map ngData = new HashMap();
-                ngData.put("code", "0005");
-                ngData.put("msg", "open id 不正确!");
+                ngData.put("code", "005");
+                ngData.put("msg", "微信帐号"+wxUserId+"与ERP帐号未绑定!");
                 list.add(ngData);
                 result.put("ngData", list);
                 String json = null;

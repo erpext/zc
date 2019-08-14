@@ -19,7 +19,8 @@ $(function() {
                 CurrentLoginUser = data.wxUserId;
             }else{
                 //Cookie取不到用户信息，跳回首页
-                window.location.href="/getWxUserIdinit.html";
+                alert('Cookie取不到用户信息，跳回首页')
+                window.location.href="/wx/getWxUserIdinit.html";
             }
         },
         error: function () {

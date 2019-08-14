@@ -287,7 +287,7 @@ public class UserController {
         System.out.println("accessToken:"+accessToken+"\njsapi_ticket:"+jsapi_ticket+"\n时间戳："+timestamp+"\n随机字符串："+noncestr);
 
         //4、获取url
-        String url="http://www.erpext.cn/index2.html";
+        String url="";
         url = "http://" + pageName;
         System.out.println("url domain:"+url);
         /*根据JSSDK上面的规则进行计算，这里比较简单，我就手动写啦
@@ -310,9 +310,13 @@ public class UserController {
         List list = new ArrayList();
         Map ngData = new HashMap();
 
-        String appId="ww407df9674da5c8f7";//企业ID
-        String secret="_MLl50OalyL_2jzfhaWE1PnvjCsmSNFGat4vkMNbKzQ";//第三方用户唯一凭证密钥，即appsecret
-        String agentId="1000002";   //
+//        String appId="wwddb0e7774f572a20";//企业ID
+//        String secret="8rhmwS9roAWDGX6ma-5F7wv1RLTI0sz98BWo37JwCsQ";//第三方用户唯一凭证密钥，即appsecret
+//        String agentId="1000002";   //
+
+        String appId="ww1bb7fc836be3a843";//企业ID
+        String secret="-f83lVtghRy5ZJr0GMxMzvi_fAsOqFs1ycysXamm464";//第三方用户唯一凭证密钥，即appsecret
+        String agentId="1000022";   //
         ngData.put("appId", appId);
         ngData.put("secret", secret);
         ngData.put("agentId", agentId);
@@ -422,8 +426,12 @@ public class UserController {
      */
     public static String getAccessToken() {
         String access_token = "";
-        String AppId="ww407df9674da5c8f7";//第三方用户唯一凭证
-        String secret="_MLl50OalyL_2jzfhaWE1PnvjCsmSNFGat4vkMNbKzQ";//第三方用户唯一凭证密钥，即appsecret
+        //DEV
+        //String AppId="ww407df9674da5c8f7";//第三方用户唯一凭证
+        //String secret="_MLl50OalyL_2jzfhaWE1PnvjCsmSNFGat4vkMNbKzQ";//第三方用户唯一凭证密钥，即appsecret
+        //zhongcai
+        String AppId="ww1bb7fc836be3a843";//第三方用户唯一凭证
+        String secret="-f83lVtghRy5ZJr0GMxMzvi_fAsOqFs1ycysXamm464";//第三方用户唯一凭证密钥，即appsecret
         //这个url链接地址和参数皆不能变
         String url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid="+AppId+"&corpsecret="+secret;
         //https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwddb0e7774f572a20&corpsecret=8rhmwS9roAWDGX6ma-5F7wv1RLTI0sz98BWo37JwCsQ

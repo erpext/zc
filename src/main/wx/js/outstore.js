@@ -3,7 +3,7 @@ $(function() {
     //todo: 进入页面的时候，拉取数据，并给仓库 赋值
     $.ajax({
         type: 'GET',
-        url: InterfaceDomain + '/user/getWxConfig?pageName=www.erpext.cn/outstore.html',
+        url: InterfaceDomain + '/user/getWxConfig?pageName=' + AppDomain + '/outstore.html',
         xhrFields:{withCredentials: true},
         contentType: "application/json; charset=utf-8",
         dataType: 'json',
@@ -187,7 +187,7 @@ function confirmClick(){
                 console.log(data);
                 alert('操作成功！')
                 //返回主页
-                window.location.href='http://www.erpext.cn/index.html' 
+                window.location.href= '/wx/index.html' 
             }else{
                 alert('操作不成功:' + data.ngData[0].msg)
             }

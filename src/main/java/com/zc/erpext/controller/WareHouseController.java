@@ -83,20 +83,17 @@ public class WareHouseController {
 
     }
 
-    @RequestMapping(value = "/listWareHouseDetail",method = RequestMethod.GET)
+    @RequestMapping(value = "/listWareHouseDetail",method = RequestMethod.POST)
     public String listWareHouseDetail(@RequestBody String requestBody, HttpServletRequest request) {
 
         try {
             Map<String, Object> requestMap = mapper.readValue(requestBody, Map.class);
             logger.info("请求参数 ===> " + requestMap);
             String ckdd; //ckdd
-            String open_id; //wx_open_id_zc
 
             //获取account参数值
             ckdd = (String) requestMap.get("ckdd");
-
-            //获取wx_open_id_zc参数值
-            open_id = (String) requestMap.get("open_id");
+            System.out.println("********ckdd=" + ckdd);
 
             List lst = wareHouseService.getWareHouseDetail(ckdd);
 
@@ -119,8 +116,6 @@ public class WareHouseController {
                 logger.info(json);
                 return json;
 
-//                {"result":" NG"," ngData":[ {"code":"001","msg":"06"},{"code":"002","msg":"06"}]}
-//                {"result":" OK" }
             } else {
 
                 Map result = new HashMap();
