@@ -3,6 +3,7 @@ package com.zc.erpext.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.zc.erpext.entity.ConstParam;
 import com.zc.erpext.entity.SysUser;
 import com.zc.erpext.entity.User;
 import com.zc.erpext.service.UserService;
@@ -11,6 +12,7 @@ import com.zc.erpext.util.Result;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -37,6 +39,16 @@ import java.util.UUID;
 public class UserController {
 
     private static final Log logger = LogFactory.getLog(UserController.class);
+
+    @Autowired
+    private ConstParam constParam;
+
+    @Value("${constparam.appid}")
+    private String appId;
+    @Value("${constparam.secret}")
+    private String secret;
+    @Value("${constparam.agentid}")
+    private String agentId;
 
     @Autowired
     private UserService userService;
@@ -276,7 +288,7 @@ public class UserController {
     @RequestMapping(value = "/getWxConfig", method = RequestMethod.GET)
     public String getWxConfig(@RequestParam("pageName") String pageName) {
         //1、获取AccessToken
-        String accessToken = getAccessToken();
+        String accessToken = getAccessToken(appId,secret);
 
         //2、获取Ticket
         String jsapi_ticket = getTicket(accessToken);
@@ -310,13 +322,10 @@ public class UserController {
         List list = new ArrayList();
         Map ngData = new HashMap();
 
-//        String appId="wwddb0e7774f572a20";//企业ID
-//        String secret="8rhmwS9roAWDGX6ma-5F7wv1RLTI0sz98BWo37JwCsQ";//第三方用户唯一凭证密钥，即appsecret
-//        String agentId="1000002";   //
+        System.out.println("********getWxConfig.appId: " + appId);
+        System.out.println("*******getWxConfig.secret: " + secret);
+        System.out.println("******getWxConfig.agentId: " + agentId);
 
-        String appId="ww1bb7fc836be3a843";//企业ID
-        String secret="-f83lVtghRy5ZJr0GMxMzvi_fAsOqFs1ycysXamm464";//第三方用户唯一凭证密钥，即appsecret
-        String agentId="1000022";   //
         ngData.put("appId", appId);
         ngData.put("secret", secret);
         ngData.put("agentId", agentId);
@@ -342,7 +351,7 @@ public class UserController {
 
     @RequestMapping(value = "/getWxUserIdByCode", method = RequestMethod.GET)
     public String getWxUserIdByCode(HttpServletResponse response,@RequestParam("code") String code) {
-        String accessToken = getAccessToken();  //获取AccessToken
+        String accessToken = getAccessToken(appId,secret);  //获取AccessToken
         String wxUserId = "";
         String url = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token="+accessToken+"&code="+code;
         try {
@@ -424,17 +433,11 @@ public class UserController {
     /**
     getAccessToken
      */
-    public static String getAccessToken() {
+    public static String getAccessToken(String myAppId, String mySecret) {
         String access_token = "";
-        //DEV
-        //String AppId="ww407df9674da5c8f7";//第三方用户唯一凭证
-        //String secret="_MLl50OalyL_2jzfhaWE1PnvjCsmSNFGat4vkMNbKzQ";//第三方用户唯一凭证密钥，即appsecret
-        //zhongcai
-        String AppId="ww1bb7fc836be3a843";//第三方用户唯一凭证
-        String secret="-f83lVtghRy5ZJr0GMxMzvi_fAsOqFs1ycysXamm464";//第三方用户唯一凭证密钥，即appsecret
-        //这个url链接地址和参数皆不能变
-        String url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid="+AppId+"&corpsecret="+secret;
-        //https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwddb0e7774f572a20&corpsecret=8rhmwS9roAWDGX6ma-5F7wv1RLTI0sz98BWo37JwCsQ
+        System.out.println("********getAccessToken.appId: " + myAppId);
+        System.out.println("*******getAccessToken.secret: " + mySecret);
+        String url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + myAppId +"&corpsecret=" + mySecret;
         try {
             URL urlGet = new URL(url);
             HttpURLConnection http = (HttpURLConnection) urlGet.openConnection();

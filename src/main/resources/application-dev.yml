@@ -2,22 +2,20 @@ server:
   port: 8083
 
 spring:
-  profiles:
-    active: dev
   datasource:
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
     url: jdbc:sqlserver://127.0.0.1;instanceName=SQL2K12;databaseName=WX_ERP_NEWDZ
     username: sa
     password: Jp@12345!
 
-  freemarker:
-    suffix: .ftl
-    content-type: text/html
-    charset: utf-8
-    cache: false
-    template-loader-path: classpath:/templates
-    mvc:
-      static-path-pattern: /static/**
+    freemarker:
+      suffix: .ftl
+      content-type: text/html
+      charset: utf-8
+      cache: false
+      template-loader-path: classpath:/templates
+      mvc:
+        static-path-pattern: /static/**
 
 mybatis:
   mapper-locations: classpath*:com/zc/erpext/dao/*Dao.xml

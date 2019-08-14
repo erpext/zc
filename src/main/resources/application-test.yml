@@ -2,22 +2,20 @@ server:
   port: 8083
 
 spring:
-  profiles:
-    active: dev
   datasource:
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://127.0.0.1;instanceName=SQL2K12;databaseName=WX_ERP_NEWDZ
+    url: jdbc:sqlserver://192.168.1.9:1433;databaseName=WX_ERP_NEWDZ
     username: sa
-    password: Jp@12345!
+    password: sa
 
-  freemarker:
-    suffix: .ftl
-    content-type: text/html
-    charset: utf-8
-    cache: false
-    template-loader-path: classpath:/templates
-    mvc:
-      static-path-pattern: /static/**
+    freemarker:
+      suffix: .ftl
+      content-type: text/html
+      charset: utf-8
+      cache: false
+      template-loader-path: classpath:/templates
+      mvc:
+        static-path-pattern: /static/**
 
 mybatis:
   mapper-locations: classpath*:com/zc/erpext/dao/*Dao.xml
@@ -35,6 +33,6 @@ logging:
   file: logs/spring-boot-logging.log
 
 constparam:
-  appid: ww407df9674da5c8f7
-  secret: _MLl50OalyL_2jzfhaWE1PnvjCsmSNFGat4vkMNbKzQ
-  agentid: 1000002
+  appid: ww1bb7fc836be3a843
+  secret: -f83lVtghRy5ZJr0GMxMzvi_fAsOqFs1ycysXamm464
+  agentid: 1000022
