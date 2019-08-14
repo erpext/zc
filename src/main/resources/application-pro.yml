@@ -1,0 +1,38 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://192.168.1.249:1433;databaseName=WX_ERP_NEWDZ
+    username: sa
+    password: sa
+
+    freemarker:
+      suffix: .ftl
+      content-type: text/html
+      charset: utf-8
+      cache: false
+      template-loader-path: classpath:/templates
+      mvc:
+        static-path-pattern: /static/**
+
+mybatis:
+  mapper-locations: classpath*:com/zc/erpext/dao/*Dao.xml
+  type-aliases-package: com.zc.erpext.entity
+  configuratio:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    org:
+      springframework: DEBUG
+    com:
+      zc:
+        erpext: DEBUG
+  file: logs/spring-boot-logging.log
+
+constparam:
+  appid: ww1bb7fc836be3a843
+  secret: -f83lVtghRy5ZJr0GMxMzvi_fAsOqFs1ycysXamm464
+  agentid: 1000022

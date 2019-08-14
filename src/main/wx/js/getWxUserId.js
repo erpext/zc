@@ -22,7 +22,7 @@ $(function() {
                 alert("未绑定企业号，或者未授权此应用，请联系管理员解决!");
             }else{
                 //alert('您的帐号是' + wxUserId);
-                window.location.href='http://www.erpext.cn/index.html'
+                window.location.href= '/wx/index.html';
             }
         },
         error: function () {

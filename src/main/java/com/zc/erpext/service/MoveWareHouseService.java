@@ -33,4 +33,6 @@ public interface MoveWareHouseService {
     long getYkdIdByYkno(String ykno);
 
     String getUserNoByOpenId(String open_id);
+
+    //String testGetCookie();
 }

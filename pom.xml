@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.zc</groupId>
-	<artifactId>erpext-pro</artifactId>
-	<version>190811.1</version>
+	<artifactId>erpext-test</artifactId>
+	<version>190813.1</version>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -78,6 +78,13 @@
 			<!--<artifactId>spring-boot-starter-quartz</artifactId>-->
 			<!--<version>2.1.0.BUILD-SNAPSHOT</version>-->
 		<!--</dependency>-->
+
+		<!-- 支持 @ConfigurationProperties 注解 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
 
 	</dependencies>
 

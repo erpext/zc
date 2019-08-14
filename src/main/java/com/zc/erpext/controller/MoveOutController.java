@@ -42,6 +42,51 @@ public class MoveOutController {
     @Autowired
     private MoveWareHouseService moveWareHouseService;
 
+    @RequestMapping(value = "/testGetCookie",method = RequestMethod.GET)
+    public  String testGetCookie(HttpServletRequest request){
+        //HttpServletRequest 装请求信息类
+        //HttpServletRespionse 装相应信息的类
+        //Cookie cookie=new Cookie("sessionId","CookieTestInfo");
+        String wxUserId=null;
+        System.out.println("***********************************************" );
+        System.out.println("********getWxUserIdFromCookie******************" );
+        System.out.println("***********************************************" );
+        Cookie[] cookies =  request.getCookies();
+        if(cookies != null){
+            System.out.println("********Cookie is not null*********************" );
+            for(Cookie cookie : cookies){
+                if(cookie.getName().equals("wxUserId")){
+                    wxUserId = cookie.getValue();
+                    System.out.println("********wxUserId (UserController) 1=" + wxUserId);
+                    //return wxUserId;
+                }
+            }
+        }else {
+            System.out.println("***********************************************" );
+            System.out.println("********Cookie is null*************************" );
+            System.out.println("***********************************************" );
+        }
+        System.out.println("********wxUserId (UserController) 2:" + wxUserId);
+
+        Map result = new HashMap();
+        if(wxUserId != null && wxUserId.length() != 0) {
+            result.put("result", "OK");
+            result.put("wxUserId", wxUserId);
+        }else
+        {
+            result.put("result", "NG");
+            result.put("wxUserId", "");
+        }
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(result);
+        } catch (JsonProcessingException e) {
+
+        }
+        logger.info(json);
+        return json;
+    }
+
     /**
      * 移库接口
      *
@@ -60,31 +105,21 @@ public class MoveOutController {
             System.out.println("********Move Out start*************************" );
             System.out.println("***********************************************" );
             //String wxUserId = userService.getWxUserIdFromCookie(request);
-            String wxUserId=null;
-            System.out.println("********getWxUserIdFromCookie start");
-            Cookie[] cookies =  request.getCookies();
-            if(cookies != null){
-                for(Cookie cookie : cookies){
-                    if(cookie.getName().equals("wxUserId")){
-                        wxUserId = cookie.getValue();
-                        System.out.println("********wxUserId (MoveOutController) 1=" + wxUserId);
-                    }
-                }
-            }
-            //tbd:cookie timeout
-            System.out.println("********wxUserId (MoveOutController) 2:" + wxUserId);
 
             Map<String, Object> requestMap = mapper.readValue(requestBody, Map.class);
             List<Map> cpjhlist = new ArrayList<>(); //卷号
             String ckdd_yc; //移出仓库
             String ckdd_yr; //移入仓库
+            String wxUserId;   //
             //获取参数值
             cpjhlist = (ArrayList<Map>) requestMap.get("cpjhlist"); //卷号
             ckdd_yc = (String) requestMap.get("ckdd_yc");
             ckdd_yr = (String) requestMap.get("ckdd_yr");
+            wxUserId = (String) requestMap.get("currentLoginUser");
 
             System.out.println("********ckdd_yc=" + ckdd_yc);
             System.out.println("********ckdd_yr=" + ckdd_yr);
+            System.out.println("********wxUserId=" + wxUserId);
 
             if (cpjhlist.size() == 0 || ("").equals(ckdd_yc) || ("").equals(ckdd_yr)) {
                 //返回 NG
@@ -93,7 +128,7 @@ public class MoveOutController {
                 result.put("result", "NG");
                 List list = new ArrayList();
                 Map ngData = new HashMap();
-                ngData.put("code", "0003");
+                ngData.put("code", "003");
                 ngData.put("msg", "参数不正确!");
                 list.add(ngData);
                 result.put("ngData", list);
@@ -114,8 +149,8 @@ public class MoveOutController {
                 result.put("result", "NG");
                 List list = new ArrayList();
                 Map ngData = new HashMap();
-                ngData.put("code", "0005");
-                ngData.put("msg", "open id 不正确!");
+                ngData.put("code", "006");
+                ngData.put("msg", "微信帐号"+wxUserId+"与ERP帐号未绑定!");
                 list.add(ngData);
                 result.put("ngData", list);
                 String json = null;

@@ -31,7 +31,7 @@
     </select>
 
     <select id="getKcXxByCpjh" parameterType="java.util.Map" resultType="com.zc.erpext.entity.KcTbcpkchzs">
-        select top 1 * from kc_tbCpkchzs where weight >0 AND hz_month=convert(varchar(6), getdate(), 112)
+        select top 1 * from kc_tbCpkchzs where weight > 0 AND hz_month=convert(varchar(6), getdate(), 112)
         and ckdd = #{ckdd_yc,jdbcType=VARCHAR}
         and cpjh = #{cpjh,jdbcType=VARCHAR}
     </select>

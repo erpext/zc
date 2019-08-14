@@ -3,7 +3,7 @@ $(function() {
     //todo: 进入页面的时候，拉取数据，并给仓库 赋值
     $.ajax({
         type: 'GET',
-        url: InterfaceDomain + '/user/getWxConfig?pageName=www.erpext.cn/outstore.html',
+        url: InterfaceDomain + '/user/getWxConfig?pageName=' + AppDomain + '/outstore.html',
         xhrFields:{withCredentials: true},
         contentType: "application/json; charset=utf-8",
         dataType: 'json',
@@ -125,22 +125,69 @@ function confirmClick(){
     if (val4) {
         param.cpjhlist.push({ cpjh: val4 });
     }
+    //alert(CurrentLoginUser);
+    param.currentLoginUser = CurrentLoginUser;
     //alert(JSON.stringify(param));
+
+    // $.ajax({
+    //     type: 'GET',
+    //     url: InterfaceDomain + '/user/getCookieUserId',
+    //     xhrFields:{withCredentials: true},
+    //     contentType: "application/json; charset=utf-8",
+    //     dataType: 'json',
+    //     success: function (data) {
+    //         //alert(data.result);
+    //         //alert(data.wxUserId);
+    //         if (data.result == "OK"){
+    //             console.log(data);
+    //             alert('Cookie正常，欢迎你：'+ data.wxUserId)
+    //         }else{
+    //             //Cookie取不到用户信息，跳回首页
+    //             alert('Cookie丢失!')
+    //         }
+    //     },
+    //     error: function () {
+    //         alert("测试失败，请稍候再试!");
+    //     }
+    // });
+    // $.ajax({
+    //     type: 'GET',
+    //     url: InterfaceDomain + '/moveout/testGetCookie',
+    //     xhrFields:{withCredentials: true},
+    //     contentType: "application/json; charset=utf-8",
+    //     dataType: 'json',
+    //     success: function (data) {
+    //         //alert(data.result);
+    //         //alert(data.wxUserId);
+    //         if (data.result == "OK"){
+    //             console.log(data);
+    //             alert('Cookie正常，欢迎你：'+ data.wxUserId)
+    //         }else{
+    //             //Cookie取不到用户信息，跳回首页
+    //             alert('Cookie丢失!')
+    //         }
+    //     },
+    //     error: function () {
+    //         alert("测试失败，请稍候再试!");
+    //     }
+    // });
+
     $.ajax({
         type: 'POST',
         url: InterfaceDomain + '/moveout',
-        data: JSON.stringify(param),
         xhrFields:{withCredentials: true},
+        crossDomain: true,
+        data: JSON.stringify(param),
         contentType: "application/json; charset=utf-8",
         dataType: 'json',
         success: function (data) {
-            console.log(JSON.stringify(data));
+            console.log(JSON.stringify(data))
             if (data.result == "OK"){
                 //let res = data.ngData[0];
                 console.log(data);
                 alert('操作成功！')
                 //返回主页
-                window.location.href='http://www.erpext.cn/index.html' 
+                window.location.href= '/wx/index.html' 
             }else{
                 alert('操作不成功:' + data.ngData[0].msg)
             }
