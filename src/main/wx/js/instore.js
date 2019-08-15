@@ -147,7 +147,7 @@ function confirmClick(){
                 console.log(data);
                 alert('操作成功！')
                 //返回主页
-                window.location.href= AppAddress + '/index.html' 
+                window.location.href= '/wx/index.html' 
             }else{
                 alert('操作不成功:' + data.ngData[0].msg)
             }
