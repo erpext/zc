@@ -296,12 +296,12 @@ public class UserController {
         //3、时间戳和随机字符串
         String noncestr = UUID.randomUUID().toString().replace("-", "").substring(0, 16);//随机字符串
         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);//时间戳
-        System.out.println("accessToken:"+accessToken+"\njsapi_ticket:"+jsapi_ticket+"\n时间戳："+timestamp+"\n随机字符串："+noncestr);
+        System.out.println("******accessToken:"+accessToken+"\n******jsapi_ticket:"+jsapi_ticket+"\n******时间戳："+timestamp+"\n******随机字符串："+noncestr);
 
         //4、获取url
         String url="";
         url = "http://" + pageName;
-        System.out.println("url domain:"+url);
+        System.out.println("******url:"+url);
         /*根据JSSDK上面的规则进行计算，这里比较简单，我就手动写啦
         String[] ArrTmp = {"jsapi_ticket","timestamp","nonce","url"};
         Arrays.sort(ArrTmp);
@@ -315,7 +315,7 @@ public class UserController {
         String str = "jsapi_ticket="+jsapi_ticket+"&noncestr="+noncestr+"&timestamp="+timestamp+"&url="+url;
         //6、将字符串进行sha1加密
         String signature =SHA1(str);
-        System.out.println("签名参数："+str+"\n签名："+signature);
+        System.out.println("******签名参数："+str+"\n签名："+signature);
 
         Map result = new HashMap();
         result.put("result", "OK");
