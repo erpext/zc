@@ -91,6 +91,7 @@ function confirmClick(){
     }
     //alert(CurrentLoginUser);
     param.currentLoginUser = CurrentLoginUser;
+    param.currentPathname = window.location.pathname;
     //alert(JSON.stringify(param));
     $.ajax({
         type: 'POST',
