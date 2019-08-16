@@ -78,6 +78,17 @@
 		SELECT top 1 user_no from SYS_USER u where u.WX_OPEN_ID_ZC = #{open_id,jdbcType=VARCHAR}
 	</select>
 
+	<!-- 校验权限 -->
+	<select id="getIsPrivilegeByPrivilegeNo" parameterType="Map" resultType="int">
+		SELECT count(1)
+		FROM SYS_USER,SYS_USER_ROLE,SYS_ROLE_PRIVILEGE,SYS_PRIVILEGE
+		WHERE SYS_USER.ID=SYS_USER_ROLE.USER_ID
+		AND SYS_USER_ROLE.ROLE_ID=SYS_ROLE_PRIVILEGE.ROLE_ID
+		AND SYS_PRIVILEGE.ID = SYS_ROLE_PRIVILEGE.PRIVILEGE_ID
+		AND SYS_USER.WX_OPEN_ID_ZC = #{wxUserId}
+		AND SYS_PRIVILEGE.RESOURCE = #{resourceNo}
+		AND SYS_PRIVILEGE.OPERATION = #{operationNo}
+	</select>
 
 </mapper>
 

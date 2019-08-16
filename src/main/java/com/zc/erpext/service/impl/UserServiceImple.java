@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @Service(value = "UserService")
 public class UserServiceImple implements UserService {
@@ -72,6 +73,20 @@ public class UserServiceImple implements UserService {
     @Override
     public void updateWXid(SysUser sysUser) {
         userDao.updateWXid(sysUser);
+    }
+
+
+    /**
+     * 用于校验微信是否已绑定
+     *
+     * @param wxUserId
+     * @param resourceNo
+     * @param operationNo
+     * @return
+     */
+    @Override
+    public int getIsPrivilegeByPrivilegeNo(Map map) {
+        return userDao.getIsPrivilegeByPrivilegeNo(map);
     }
 
 }
