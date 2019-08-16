@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zc.erpext.service.MoveWareHouseService;
+import com.zc.erpext.service.UserService;
 import com.zc.erpext.service.WareHouseService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,6 +29,9 @@ public class WareHouseController {
 
     @Autowired
     private MoveWareHouseService moveWareHouseService;
+
+    @Autowired
+    private UserController userController;
 
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -162,6 +166,7 @@ public class WareHouseController {
 
             String saleflag; //ckdd
             String wxUserId;
+            String currentPathname;
             List<Map> cpjhlist = new ArrayList<>(); //卷号
 
             //获取account参数值
@@ -169,6 +174,7 @@ public class WareHouseController {
 
             //获取wx_open_id_zc参数值
             wxUserId = (String) requestMap.get("currentLoginUser");
+            currentPathname = (String) requestMap.get("currentPathname");
 
             System.out.println("********saleflag=" + saleflag);
             System.out.println("********wxUserId=" + wxUserId);
@@ -182,6 +188,26 @@ public class WareHouseController {
                 Map ngData = new HashMap();
                 ngData.put("code", "005");
                 ngData.put("msg", "微信帐号"+wxUserId+"与ERP帐号未绑定!");
+                list.add(ngData);
+                result.put("ngData", list);
+                String json = null;
+                try {
+                    json = mapper.writeValueAsString(result);
+                } catch (JsonProcessingException e) {
+
+                }
+                logger.info(json);
+                return json;
+            }
+            //判断用户是否有保存权限
+            int isPrivilege = userController.getIsPrivilege(wxUserId,currentPathname);
+            if (isPrivilege <= 0){
+                Map result = new HashMap();
+                result.put("result", "NG");
+                List list = new ArrayList();
+                Map ngData = new HashMap();
+                ngData.put("code", "011");
+                ngData.put("msg", "未授权！");
                 list.add(ngData);
                 result.put("ngData", list);
                 String json = null;

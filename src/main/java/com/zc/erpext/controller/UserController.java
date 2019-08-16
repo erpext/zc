@@ -65,17 +65,27 @@ public class UserController {
     }
 
     @RequestMapping(value = "/getCookieUserId",method = RequestMethod.GET)
-    public String getCookieUserId(HttpServletRequest request){
+    public String getCookieUserId(HttpServletRequest request, @RequestParam("currentPathname") String currentPathname){
+        System.out.println("***********************************************");
+        System.out.println("********currentPathname: " + currentPathname);
+        System.out.println("***********************************************");
         String wxUserId = getWxUserIdFromCookie(request);
 
         Map result = new HashMap();
         if(wxUserId != null && wxUserId.length() != 0) {
-            result.put("result", "OK");
-            result.put("wxUserId", wxUserId);
+            //判断权限
+            int isPrivilege = getIsPrivilege(wxUserId,currentPathname);
+            if (isPrivilege > 0){
+                result.put("result", "OK");
+                result.put("wxUserId", wxUserId);
+            }else{
+                result.put("result", "NP");
+                result.put("wxUserId", "未授权此功能!");
+            }
         }else
         {
            result.put("result", "NG");
-           result.put("wxUserId", "");
+           result.put("wxUserId", "Cookie取不到用户信息!");
         }
         String json = null;
         try {
@@ -85,6 +95,36 @@ public class UserController {
         }
         logger.info(json);
         return json;
+    }
+
+    //判断用户是否有保存权限
+    public int getIsPrivilege(String wxUserId, String currentPathname) {
+        int isPrivilege = 0;
+        currentPathname = currentPathname.toLowerCase();
+        if (currentPathname.indexOf("index") >= 0 ){
+            isPrivilege = 1;
+        }
+        HashMap<String,Object> map = new HashMap<String, Object>();
+        map.put("wxUserId", wxUserId);
+        if (currentPathname.indexOf("outstore") >= 0 ){
+            map.put("resourceNo", "KCCP23100");
+            map.put("operationNo", "save");
+            isPrivilege = userService.getIsPrivilegeByPrivilegeNo(map); //移库-移出
+        }
+        if (currentPathname.indexOf("instore") >= 0 ){
+            map.put("resourceNo", "KCCP24100");
+            map.put("operationNo", "save");
+            isPrivilege = userService.getIsPrivilegeByPrivilegeNo(map); //移库-库内
+        }
+        if (currentPathname.indexOf("updateflag") >= 0 ){
+            map.put("resourceNo", "KCCP16100");
+            map.put("operationNo", "save");
+            isPrivilege = userService.getIsPrivilegeByPrivilegeNo(map);  //更新产品销售标志
+        }
+        System.out.println("***********************************************");
+        System.out.println("********getIsPrivilege.isPrivilege: " + isPrivilege);
+        System.out.println("***********************************************");
+        return isPrivilege;
     }
 
     public String getWxUserIdFromCookie(HttpServletRequest request) {

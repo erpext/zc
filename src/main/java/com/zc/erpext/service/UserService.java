@@ -1,6 +1,7 @@
 package com.zc.erpext.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.zc.erpext.entity.SysUser;
 import com.zc.erpext.entity.User;
@@ -23,4 +24,7 @@ public interface UserService {
     String getUserNoByOpenId(String wx_open_id);
 
     void updateWXid(SysUser sysUser);
+
+    int getIsPrivilegeByPrivilegeNo(Map map);
+
 }
