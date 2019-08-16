@@ -1,4 +1,3 @@
-
 // 页面初始化时 就调用的方法
 $(function() {
     //todo: 进入页面的时候，拉取数据，并给仓库 赋值
@@ -88,6 +87,9 @@ function scanClick(id){
         scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
         success: function (res) {
             var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+            if(result.includes(',')){
+                result = result.split(',')[1];        
+            }
             //alert('扫描结果:'+result);
             //给 num_+id 赋值 
             $("#num_"+id).val(result);
